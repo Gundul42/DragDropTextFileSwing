@@ -14,11 +14,15 @@ import java.util.Vector;
 public class DragDropTextFileSwing extends JFrame
 {
 
-	private JTextArea textArea;
+	private JTextArea		textArea;
+	private final String	loginName;
+	private final String	loginPwd;
 
-	public DragDropTextFileSwing()
+	public DragDropTextFileSwing(String loginName, String loginPwd)
 	{
 		super("Drag and Drop Text File Reader");
+		this.loginName = loginName;
+		this.loginPwd = loginPwd;
 
 		textArea = new JTextArea();
 		textArea.setEditable(false);
@@ -104,7 +108,7 @@ public class DragDropTextFileSwing extends JFrame
 		BufferedReader	br = null;
 		PrintWriter		pw = null;
 		File			writeFile = null;
-		Config			nextCloud = new Config("kuemmel", "Lolipop1974#");
+		Config			nextCloud = new Config(loginName, loginPwd);
 
 		textArea.setText("");
 		try
