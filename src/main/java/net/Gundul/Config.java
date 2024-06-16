@@ -1,23 +1,65 @@
 package net.Gundul;
 
-public class Config
-{
-	private	final String		username;
-	private final String		password;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Base64;
 
-	public Config(String username, String password)
-	{
+import java.io.File;
+import java.io.IOException;
+
+public class Config {
+	private final String username;
+	private final String password;
+
+	public Config(String username, String password) {
 		this.username = username;
 		this.password = password;
 	}
 
-	public String getPassword()
-	{
+	public String getPassword() {
 		return password;
 	}
 
-	public String getUsername()
-	{
+	public String getUsername() {
 		return username;
+	}
+
+	public  void fileUpload (File file) throws FileNotFoundException {
+		String username = getUsername();
+		String password = getPassword();
+		String filePath = file.getPath();
+		String nextcloudUrl = "https://nextcloud.gundul.net/remote.php/dav/" +
+				"files/" + username + "/";
+
+		// Encode the credentials for Basic Authentication
+		String auth = username + ":" + password;
+		String encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes());
+
+		// Create the HttpClient
+		HttpClient client = HttpClient.newHttpClient();
+
+		// Create the HttpRequest
+		HttpRequest request = HttpRequest.newBuilder()
+				.uri(URI.create(nextcloudUrl + Paths.get(filePath).getFileName().toString()))
+				.header("Authorization", "Basic " + encodedAuth)
+				.PUT(HttpRequest.BodyPublishers.ofFile(Path.of(filePath)))
+				.build();
+
+		try {
+			// Send the request
+			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+			// Print the response status and body
+			System.out.println("Response Code: " + response.statusCode());
+			System.out.println("Response Body: " + response.body());
+		} catch (IOException | InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 }

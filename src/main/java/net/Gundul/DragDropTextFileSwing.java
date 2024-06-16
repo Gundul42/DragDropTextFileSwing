@@ -103,12 +103,15 @@ public class DragDropTextFileSwing extends JFrame
 		String			path;
 		BufferedReader	br = null;
 		PrintWriter		pw = null;
+		File			writeFile = null;
+		Config			nextCloud = new Config("kuemmel", "Lolipop1974#");
 
 		textArea.setText("");
 		try
 		{
 			br = new BufferedReader(new FileReader(file));
 			path = file.getAbsolutePath() + ".upl";
+			writeFile = new File(path);
 			pw = new PrintWriter(path);
 
 			line = parseFile(br);
@@ -119,6 +122,8 @@ public class DragDropTextFileSwing extends JFrame
 				line = parseFile(br);
 			}
 			pw.close();
+			nextCloud.fileUpload(writeFile);
+
 		}
 		catch (IOException e)
 		{
