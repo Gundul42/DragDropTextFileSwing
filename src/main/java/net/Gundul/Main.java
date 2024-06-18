@@ -9,11 +9,12 @@ public class Main
 		//******************************
 		String		yourUserName = null;
 		String		yourPassword = null;
+		String		yourUrl = "https://";
 		//******************************
 
 		SwingUtilities.invokeLater(() -> {
 			DragDropTextFileSwing frame =
-					new DragDropTextFileSwing(yourUserName, yourPassword);
+					new DragDropTextFileSwing(yourUserName, yourPassword, yourUrl);
 			frame.setVisible(true);
 		});
 	}
