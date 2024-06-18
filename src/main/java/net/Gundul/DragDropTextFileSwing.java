@@ -8,6 +8,7 @@ import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetAdapter;
 import java.awt.dnd.DropTargetDropEvent;
 import java.io.*;
+import java.net.ConnectException;
 import java.util.List;
 import java.util.Vector;
 
@@ -17,12 +18,14 @@ public class DragDropTextFileSwing extends JFrame
 	private JTextArea		textArea;
 	private final String	loginName;
 	private final String	loginPwd;
+	private final String	url;
 
-	public DragDropTextFileSwing(String loginName, String loginPwd)
+	public DragDropTextFileSwing(String loginName, String loginPwd, String url)
 	{
 		super("Drag and Drop Text File Reader");
 		this.loginName = loginName;
 		this.loginPwd = loginPwd;
+		this.url = url;
 
 		textArea = new JTextArea();
 		textArea.setEditable(false);
@@ -108,7 +111,7 @@ public class DragDropTextFileSwing extends JFrame
 		BufferedReader	br = null;
 		PrintWriter		pw = null;
 		File			writeFile = null;
-		Config			nextCloud = new Config(loginName, loginPwd);
+		Config			nextCloud = new Config(loginName, loginPwd, url);
 
 		textArea.setText("");
 		try
@@ -127,7 +130,6 @@ public class DragDropTextFileSwing extends JFrame
 			}
 			pw.close();
 			nextCloud.fileUpload(writeFile);
-
 		}
 		catch (IOException e)
 		{

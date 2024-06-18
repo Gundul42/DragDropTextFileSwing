@@ -2,6 +2,7 @@ package net.Gundul;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -11,31 +12,37 @@ import java.nio.file.Paths;
 import java.util.Base64;
 
 import java.io.File;
-import java.io.IOException;
 
-public class Config {
+public class Config
+{
 	private final String username;
 	private final String password;
+	private final String url;
 
-	public Config(String username, String password) {
+
+	public Config(String username, String password, String url)
+	{
+		this.url = url;
 		this.username = username;
 		this.password = password;
 	}
 
-	public String getPassword() {
+	public String getPassword()
+	{
 		return password;
 	}
 
-	public String getUsername() {
+	public String getUsername()
+	{
 		return username;
 	}
 
-	public  void fileUpload (File file) throws FileNotFoundException {
+	public  void fileUpload (File file) throws FileNotFoundException, ConnectException
+	{
 		String username = getUsername();
 		String password = getPassword();
 		String filePath = file.getPath();
-		String nextcloudUrl = "https://nextcloud.gundul.net/remote.php/dav/" +
-				"files/" + username + "/";
+		String nextcloudUrl = url + "/remote.php/dav/" + "files/" + username + "/";
 
 		// Encode the credentials for Basic Authentication
 		String auth = username + ":" + password;
@@ -44,21 +51,23 @@ public class Config {
 		// Create the HttpClient
 		HttpClient client = HttpClient.newHttpClient();
 
+		try
+		{
 		// Create the HttpRequest
 		HttpRequest request = HttpRequest.newBuilder()
 				.uri(URI.create(nextcloudUrl + Paths.get(filePath).getFileName().toString()))
 				.header("Authorization", "Basic " + encodedAuth)
 				.PUT(HttpRequest.BodyPublishers.ofFile(Path.of(filePath)))
 				.build();
-
-		try {
 			// Send the request
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
 			// Print the response status and body
 			System.out.println("Response Code: " + response.statusCode());
 			System.out.println("Response Body: " + response.body());
-		} catch (IOException | InterruptedException e) {
+		}
+		catch (Exception e)
+		{
 			e.printStackTrace();
 		}
 	}
