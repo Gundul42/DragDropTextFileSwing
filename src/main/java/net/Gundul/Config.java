@@ -63,6 +63,7 @@ public class Config
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
 			// Print the response status and body
+			System.out.println("Reuqest to: " + nextcloudUrl);
 			System.out.println("Response Code: " + response.statusCode());
 			System.out.println("Response Body: " + response.body());
 		}

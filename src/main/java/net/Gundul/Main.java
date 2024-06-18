@@ -9,7 +9,7 @@ public class Main
 		//******************************
 		String		yourUserName = null;
 		String		yourPassword = null;
-		String		yourUrl = "https://www.insertURL.toutedesuite";
+		String		yourUrl = "https://";
 		//******************************
 
 		SwingUtilities.invokeLater(() -> {
